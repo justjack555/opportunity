@@ -1,6 +1,7 @@
 package application
 
 import (
+	"database/sql"
 	"net/http"
 
 	"github.com/justjack555/opportunity/pkg/api/application/handlers"
@@ -9,8 +10,8 @@ import (
 /*
 LoadRoutes loads application routes
 */
-func LoadRoutes() error {
-	http.Handle("/", &handlers.IndexHandler{})
+func LoadRoutes(db *sql.DB) error {
+	http.Handle("/", &handlers.IndexHandler{DB: db})
 
 	return nil
 }
