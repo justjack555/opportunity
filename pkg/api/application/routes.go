@@ -12,6 +12,7 @@ LoadRoutes loads application routes
 */
 func LoadRoutes(db *sql.DB) error {
 	http.Handle("/", &handlers.IndexHandler{DB: db})
+	http.Handle("/opportunities", &handlers.OpportunityHandler{DB: db})
 
 	return nil
 }

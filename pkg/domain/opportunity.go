@@ -2,6 +2,7 @@ package domain
 
 import (
 	"database/sql"
+	"fmt"
 )
 
 type Opportunity struct {
@@ -14,6 +15,33 @@ type Opportunity struct {
 GetAllOpportunities - fetch all opportunities from db
 */
 func (opp *Opportunity) GetAllOpportunities() ([]*Opportunity, error) {
+	rows, err := opp.DB.Query("SELECT * FROM opportunities")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	opportunities := make([]*Opportunity, 0)
+	for rows.Next() {
+		opportunity := new(Opportunity)
+		err := rows.Scan(&opportunity.ID, &opportunity.Title)
+		if err != nil {
+			return nil, err
+		}
+		opportunities = append(opportunities, opportunity)
+	}
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return opportunities, nil
+}
+
+/*
+CreateOpportunities : create opportunities
+*/
+func (opp *Opportunity) CreateOpportunities(name string) ([]*Opportunity, error) {
+	fmt.Println("CreateOpps(): name: ", name)
 	rows, err := opp.DB.Query("SELECT * FROM opportunities")
 	if err != nil {
 		return nil, err
